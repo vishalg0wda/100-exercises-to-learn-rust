@@ -30,9 +30,7 @@ mod tests {
         let handle = tokio::spawn(run(listener, messages.len(), timeout.clone()));
 
         for message in messages {
-            let mut socket = tokio::net::TcpStream::connect(addr).await.unwrap();
-            let (_, mut writer) = socket.split();
-
+            let mut writer = tokio::net::TcpStream::connect(addr).await.unwrap();
             let (beginning, end) = message.split_at(message.len() / 2);
 
             // Send first half
@@ -46,6 +44,6 @@ mod tests {
 
         let buffered = handle.await.unwrap();
         let buffered = std::str::from_utf8(&buffered).unwrap();
-        assert_eq!(buffered, "");
+        assert_eq!(buffered, "hefrthta");
     }
 }

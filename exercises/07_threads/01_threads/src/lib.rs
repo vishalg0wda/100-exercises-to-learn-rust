@@ -14,8 +14,18 @@
 // this is necessary in the next exercise.
 use std::thread;
 
-pub fn sum(v: Vec<i32>) -> i32 {
-    todo!()
+pub fn sum(mut v: Vec<i32>) -> i32 {
+    let second_half = v.split_off(v.len() / 2);
+    let handles: Vec<thread::JoinHandle<i32>> = vec![
+        thread::spawn(move || v.iter().sum()),
+        thread::spawn(move || second_half.iter().sum()),
+    ];
+    let mut total = 0;
+    for handle in handles {
+        total += handle.join().unwrap();
+    }
+    
+    total
 }
 
 #[cfg(test)]
